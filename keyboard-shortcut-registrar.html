@@ -1,12 +1,30 @@
 <script>
   // KeyboardShortcutRegistrar singleton class
+  class KeyboardShortcut {
+    constructor (str) {
+      if (!str) throw new Error ('KeyStroke requires a shortcut string to function');
+      this.keyMap = str.split('+');
+    }
+
+    matches (shortcut) {
+      let other = (shortcut instanceof KeyboardShortcut) ? shortcut : new KeyboardShortcut(shortcut);
+      if (other.keyMap.length !== this.keyMap.length) return false;
+      for (let i = 0; i < this.keyMap.length; i++) {
+        if (!this.keyMap.includes(other.keyMap[i])) return false;
+      }
+      return true;
+    }
+  }
+
   const KeyboardShortcutRegistrar = (function () {
     let instance = null;
 
     const DO_NOT_FIRE_SHORTCUTS_ON_ELEMENTS = ['INPUT', 'TEXTAREA'];
 
     class KeyboardShortcutRegistrar {
-      constructor () {
+      constructor (options) {
+        (instance || this).debug = (options && options.debug) || false;
+
         if (instance) {
           return instance;
         } else {
@@ -30,13 +48,21 @@
           return;
         }
         this.controls[cmd.keyStroke] = cb;
+        this.controls[cmd.keyStroke].shortcut = new KeyboardShortcut(cmd.keyStroke);
         this.controls[cmd.keyStroke].label = cmd.label;
       }
 
       invokeShortcut(keys) {
-        let shortcut = keys.join('+');
-        // console.log(shortcut);
-        let cb = this.controls[shortcut];
+        let shortcutStr = keys.join('+');
+        let shortcut = new KeyboardShortcut(shortcutStr);
+        let cb = null;
+        for (key in this.controls) {
+          if (this.controls[key].shortcut.matches(shortcut)) {
+            cb = this.controls[key];
+            break;
+          }
+        }
+        this.debug && console.log(shortcutStr, '--->', cb);
         if (cb) cb ();
       }
 

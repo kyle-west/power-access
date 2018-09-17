@@ -32,18 +32,18 @@
     <script>
     
     let registrar = new KeyboardShortcutRegistrar();
-    registrar.register({keyStroke: '1+f', label: 'Fire off 1'}, () => { fire(1) })
-    registrar.register({keyStroke: '2+f', label: 'Fire off 2'}, () => { fire(2) })
-    registrar.register({keyStroke: '3+f', label: 'Fire off 3'}, () => { fire(3) })
-    registrar.register({keyStroke: '4+f', label: 'Fire off 4'}, () => { fire(4) })
-    registrar.register({keyStroke: '5+f', label: 'Fire off 5'}, () => { fire(5) })
-    registrar.register({keyStroke: '6+f', label: 'Fire off 6'}, () => { fire(6) })
-    registrar.register({keyStroke: '7+f', label: 'Fire off 7'}, () => { fire(7) })
-    registrar.register({keyStroke: '8+f', label: 'Fire off 8'}, () => { fire(8) })
-    registrar.register({keyStroke: '9+f', label: 'Fire off 9'}, () => { fire(9) })
+    registrar.register({keyStroke: 'f+1', label: 'Fire off 1'}, () => { fire(1) })
+    registrar.register({keyStroke: 'f+2', label: 'Fire off 2'}, () => { fire(2) })
+    registrar.register({keyStroke: 'f+3', label: 'Fire off 3'}, () => { fire(3) })
+    registrar.register({keyStroke: 'f+4', label: 'Fire off 4'}, () => { fire(4) })
+    registrar.register({keyStroke: 'f+5', label: 'Fire off 5'}, () => { fire(5) })
+    registrar.register({keyStroke: 'f+6', label: 'Fire off 6'}, () => { fire(6) })
+    registrar.register({keyStroke: 'f+7', label: 'Fire off 7'}, () => { fire(7) })
+    registrar.register({keyStroke: 'f+8', label: 'Fire off 8'}, () => { fire(8) })
+    registrar.register({keyStroke: 'f+9', label: 'Fire off 9'}, () => { fire(9) })
     
     // should be singleton
-    let registrar2 = new KeyboardShortcutRegistrar();
+    let registrar2 = new KeyboardShortcutRegistrar({debug: true});
     registrar2.register({label:'Navigate to google.com', keyStroke:'g+n'}, () => {window.location.href = 'https://google.com'})
     console.log(registrar2);
     </script>

@@ -1,9 +1,9 @@
 {
   "name": "power-access",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Provide your users with power keyboard shortcuts",
   "authors": [
-     "Kyle West <kyle-west@github.com>"
+    "Kyle West <kyle-west@github.com>"
   ],
   "main": [
     "power-access.html",

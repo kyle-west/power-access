@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <link rel="import" href="../power-access.html">
+
+    <script>
+      function fire (num) {
+        let numElem = document.getElementById('num');
+        numElem.innerText = parseInt(numElem.innerText, 10) + num;
+      }
+
+    </script>
+  </head>
+
+  <body>
+    <power-access></power-access>
+    <h1>Number <span id="num">0</span></h1>
+    <button onclick="fire(1)"><pre>fire(1)</pre></button>
+    <button onclick="fire(2)"><pre>fire(2)</pre></button>
+    <button onclick="fire(3)"><pre>fire(3)</pre></button>
+    <button onclick="fire(4)"><pre>fire(4)</pre></button>
+    <button onclick="fire(5)"><pre>fire(5)</pre></button>
+    <button onclick="fire(6)"><pre>fire(6)</pre></button>
+    <button onclick="fire(7)"><pre>fire(7)</pre></button>
+    <button onclick="fire(8)"><pre>fire(8)</pre></button>
+    <button onclick="fire(9)"><pre>fire(9)</pre></button>
+
+    <p>should not fire;
+      <input type="text" />
+      <textarea name="" id="" cols="30" rows="10"></textarea>
+    </p>
+    
+    <script>
+    
+    let registrar = new KeyboardShortcutRegistrar();
+    registrar.register({keyStroke: '1+f', label: 'Fire off 1'}, () => { fire(1) })
+    registrar.register({keyStroke: '2+f', label: 'Fire off 2'}, () => { fire(2) })
+    registrar.register({keyStroke: '3+f', label: 'Fire off 3'}, () => { fire(3) })
+    registrar.register({keyStroke: '4+f', label: 'Fire off 4'}, () => { fire(4) })
+    registrar.register({keyStroke: '5+f', label: 'Fire off 5'}, () => { fire(5) })
+    registrar.register({keyStroke: '6+f', label: 'Fire off 6'}, () => { fire(6) })
+    registrar.register({keyStroke: '7+f', label: 'Fire off 7'}, () => { fire(7) })
+    registrar.register({keyStroke: '8+f', label: 'Fire off 8'}, () => { fire(8) })
+    registrar.register({keyStroke: '9+f', label: 'Fire off 9'}, () => { fire(9) })
+    
+    // should be singleton
+    let registrar2 = new KeyboardShortcutRegistrar();
+    registrar2.register({label:'Navigate to google.com', keyStroke:'g+n'}, () => {window.location.href = 'https://google.com'})
+    console.log(registrar2);
+    </script>
+  </body>
+</html>

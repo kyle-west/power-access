@@ -1,0 +1,72 @@
+<script>
+  // KeyboardShortcutRegistrar singleton class
+  const KeyboardShortcutRegistrar = (function () {
+    let instance = null;
+
+    const DO_NOT_FIRE_SHORTCUTS_ON_ELEMENTS = ['INPUT', 'TEXTAREA'];
+
+    class KeyboardShortcutRegistrar {
+      constructor () {
+        if (instance) {
+          return instance;
+        } else {
+          instance = this;
+          this.controls = {};
+
+          document.addEventListener('keydown', keydown);
+          document.addEventListener('keyup', keyup);
+
+          return this;
+        }
+      }
+
+      register (cmd, cb) {
+        if (!(cmd && cmd.label && cmd.keyStroke)) {
+          console.error(new Error(`Shortcuts must define a keyStroke and a label. Given: ${JSON.stringify(cmd)}`))
+          return;
+        }
+        if (this.controls[cmd.keyStroke]) {
+          console.error(new Error(`About to override "${cmd}" callback in KeyboardShortcutRegistrar`))
+          return;
+        }
+        this.controls[cmd.keyStroke] = cb;
+        this.controls[cmd.keyStroke].label = cmd.label;
+      }
+
+      invokeShortcut(keys) {
+        let shortcut = keys.join('+');
+        // console.log(shortcut);
+        let cb = this.controls[shortcut];
+        if (cb) cb ();
+      }
+
+      registerDoNotFireShortcutsElement (tagName) {
+        DO_NOT_FIRE_SHORTCUTS_ON_ELEMENTS.push(tagName);
+      }
+    }
+
+    function fireMapMatch (map) {
+      let keyspressed = [];
+      for (key in map) { 
+        if (map[key]) {
+          keyspressed.push(map[key]);
+        }
+      }
+      (instance || new KeyboardShortcutRegistrar()).invokeShortcut(keyspressed);
+    }
+
+    let map = {};
+    function keydown (e) {
+      map[e.keyCode] = e.key;
+      if (!DO_NOT_FIRE_SHORTCUTS_ON_ELEMENTS.includes(e.target.tagName)) {
+        fireMapMatch(map);
+      }
+    }
+
+    function keyup (e) {
+      map[e.keyCode] = false;
+    }
+
+    return KeyboardShortcutRegistrar;
+  })();
+</script>

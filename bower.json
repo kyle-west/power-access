@@ -1,0 +1,20 @@
+{
+  "name": "power-access",
+  "version": "0.1.0",
+  "description": "Provide your users with power keyboard shortcuts",
+  "authors": [
+     "Kyle West <kyle-west@github.com>"
+  ],
+  "main": [
+    "power-access.html",
+    "keyboard-shortcut-registrar.html"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "accessibility",
+    "keyboard",
+    "shortcuts",
+    "power",
+    "users"
+  ]
+}

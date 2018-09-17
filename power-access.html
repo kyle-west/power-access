@@ -1,0 +1,81 @@
+<link rel="import" href="./keyboard-shortcut-registrar.html">
+
+<script>
+  class PowerAccess extends HTMLElement {
+    static get is () {
+      return 'power-access';
+    }
+
+    constructor (...args) {
+      super(...args);
+      this.shortcutManager = new KeyboardShortcutRegistrar();
+      this.shortcutManager.register({keyStroke: 'Shift+?', label:'Open/Close Context Menu'}, this.toggleShortcutMenu.bind(this));
+    }
+
+    static register () {
+      window.customElements.define(this.is, this);
+    }
+
+    toggleShortcutMenu () {
+      if (this.menu) {
+        if (this.menuOpen) {
+          this.closeShorcutMenu();
+        } else {
+          this.openShorcutMenu();
+        }
+      } else {
+        this.createShortcutMenu();
+        this.openShorcutMenu();
+      }
+    }
+
+    openShorcutMenu () {
+      this.menuOpen = true;
+      this.menu.style.display = 'block';
+    }
+
+    closeShorcutMenu () {
+      this.menuOpen = false;
+      this.menu.style.display = 'none';
+    }
+
+    createShortcutMenu () {
+      this.menu = document.createElement('div');
+      this.menu.style.position = 'fixed';
+      this.menu.style.width = '100%';
+      this.menu.style.height = '100%';
+      this.menu.style.top = '0px';
+      this.menu.style.left = '0px';
+      this.menu.style.zIndex = 2000000000;
+      this.menu.style.display = 'none';
+      this.menu.style.backgroundColor = 'rgba(165, 165, 165, 0.9)';
+      this.menu.innerHTML = `
+        <div style="
+          background-color: white; 
+          width: 85%;
+          height: 85%;
+          margin: auto;
+          margin-top: 4%;
+          padding: 15px;
+        ">
+          <h1>Shortcut Menu</h1>
+          ${this.generateMenuContents()} 
+        </div>
+      `;
+      document.body.appendChild(this.menu);
+    }
+
+    generateMenuContents () {
+      let controls = this.shortcutManager.controls;
+      let html = '<ul>';
+      for (key in controls) {
+        let keyStroke = key;
+        let label = controls[key].label;
+        html += `<li><code>${keyStroke}</code>: ${label}</li>`;
+      }
+      return html+'</ul>';
+    }
+  }
+
+  PowerAccess.register();
+</script>

@@ -5,7 +5,7 @@
     <script>
       function fire (num) {
         let numElem = document.getElementById('num');
-        numElem.innerText = parseInt(numElem.innerText, 10) + num;
+        numElem.innerText = num;
       }
 
     </script>
@@ -13,7 +13,7 @@
 
   <body>
     <power-access></power-access>
-    <h1>Number <span id="num">0</span></h1>
+    <h1>Last Fired Number: <span id="num">---</span></h1>
     <button onclick="fire(1)"><pre>fire(1)</pre></button>
     <button onclick="fire(2)"><pre>fire(2)</pre></button>
     <button onclick="fire(3)"><pre>fire(3)</pre></button>
@@ -24,7 +24,7 @@
     <button onclick="fire(8)"><pre>fire(8)</pre></button>
     <button onclick="fire(9)"><pre>fire(9)</pre></button>
 
-    <p>should not fire;
+    <p>should not fire shortcuts in textboxes: 
       <input type="text" />
       <textarea name="" id="" cols="30" rows="10"></textarea>
     </p>
@@ -44,8 +44,25 @@
     
     // should be singleton
     let registrar2 = new KeyboardShortcutRegistrar({debug: true});
+    registrar2.register({label:'Copy text', keyStroke:'Meta+c', displayKeys: '<CMD>+c'}, () => {window.location.href = 'https://google.com'})
     registrar2.register({label:'Navigate to google.com', keyStroke:'g+n'}, () => {window.location.href = 'https://google.com'})
     console.log(registrar2);
+
+    // override the styles:
+    document.querySelector('power-access').injectHTML = `
+      <style>
+        h1 { 
+          color: blue;
+        }
+
+        h1::after {
+          content: "(This <h1> was modified by addtional styles)";
+          color: lightgray;
+          padding-left: 25px;
+          font-size: 10pt;
+        }
+      </style>
+    `;
     </script>
   </body>
 </html>

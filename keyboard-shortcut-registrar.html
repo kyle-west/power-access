@@ -1,5 +1,4 @@
 <script>
-  // KeyboardShortcutRegistrar singleton class
   class KeyboardShortcut {
     constructor (str) {
       if (!str) throw new Error ('KeyStroke requires a shortcut string to function');
@@ -16,6 +15,7 @@
     }
   }
 
+  // KeyboardShortcutRegistrar singleton class
   const KeyboardShortcutRegistrar = (function () {
     let instance = null;
 
@@ -50,19 +50,22 @@
         this.controls[cmd.keyStroke] = cb;
         this.controls[cmd.keyStroke].shortcut = new KeyboardShortcut(cmd.keyStroke);
         this.controls[cmd.keyStroke].label = cmd.label;
+        this.controls[cmd.keyStroke].displayKeys = cmd.displayKeys;
       }
 
       invokeShortcut(keys) {
         let shortcutStr = keys.join('+');
         let shortcut = new KeyboardShortcut(shortcutStr);
         let cb = null;
+        let label = "-- No action defined --";
         for (key in this.controls) {
           if (this.controls[key].shortcut.matches(shortcut)) {
             cb = this.controls[key];
+            label = this.controls[key].label;
             break;
           }
         }
-        this.debug && console.log(shortcutStr, '--->', cb);
+        this.debug && console.log(shortcutStr, '--->', `[${label}]\t`, cb || '');
         if (cb) cb ();
       }
 

@@ -9,12 +9,10 @@
     constructor (...args) {
       super(...args);
       this.shortcutManager = new KeyboardShortcutRegistrar();
-      this.shortcutManager.register({keyStroke: 'Escape', hidden: true}, () => {
-        if (this.menuOpen) {
-          this.closeShortcutMenu();
-        }
-      });
-      this.shortcutManager.register({keyStroke: 'Shift+?', displayKeys: '<SHIFT> + <?>', label:'Open/Close Shortcut Menu'}, this.toggleShortcutMenu.bind(this));
+
+      if (!this.shortcutManager.controls['Shift+?']) {
+        this.shortcutManager.register({keyStroke: 'Shift+?', displayKeys: '<SHIFT> + <?>', label:'Open/Close Shortcut Menu'}, this.toggleShortcutMenu.bind(this));
+      }
     }
 
     static register () {
@@ -45,6 +43,11 @@
     }
 
     createShortcutMenu () {
+      this.shortcutManager.register({keyStroke: 'Escape', hidden: true}, () => {
+        if (this.menuOpen) {
+          this.closeShortcutMenu();
+        }
+      });
       this.menu = document.createElement('div');
       this.menu.style.position = 'fixed';
       this.menu.style.width = '100%';

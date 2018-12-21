@@ -1,5 +1,5 @@
 <script>
-  class KeyboardShortcut {
+  window.KeyboardShortcut = class KeyboardShortcut {
     constructor (str) {
       if (!str) throw new Error ('KeyStroke requires a shortcut string to function');
       this.keyMap = str.split('+');
@@ -16,7 +16,7 @@
   }
 
   // KeyboardShortcutRegistrar singleton class
-  const KeyboardShortcutRegistrar = (function () {
+  window.KeyboardShortcutRegistrar = (function () {
     let instance = null;
 
     const DO_NOT_FIRE_SHORTCUTS_ON_ELEMENTS = ['INPUT', 'TEXTAREA'];
@@ -44,7 +44,7 @@
           return;
         }
         if (this.controls[cmd.keyStroke]) {
-          throw new Error(`About to override "${cmd}" callback in KeyboardShortcutRegistrar`);
+          throw new Error(`About to override "${JSON.stringify(cmd)}" callback in KeyboardShortcutRegistrar`);
           return;
         }
         this.controls[cmd.keyStroke] = cb || { doNotFire: true };

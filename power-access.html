@@ -53,16 +53,18 @@
       this.menu.style.left = '0px';
       this.menu.style.zIndex = 2000000000;
       this.menu.style.display = 'none';
-      this.menu.style.backgroundColor = 'rgba(165, 165, 165, 0.9)';
+      this.menu.style.backgroundColor = 'rgba(186, 183, 177, 0.7)';
       this.menu.innerHTML = `
         <style>
           div.menu-overlay {
-            background-color: white; 
+            background-color: white;
             width: 85%;
             height: 85%;
             margin: auto;
-            margin-top: 4%;
+            margin-top: 4vh;
             padding: 15px;
+            overflow-y: scroll;
+            border-radius: 4px;
           }
 
           ul { display:table }
@@ -79,7 +81,6 @@
           }
         </style>
         <div class="menu-overlay">
-          ${this.injectHTML || ''}
           <h1>Shortcut Menu</h1>
           ${this.generateMenuContents()} 
         </div>

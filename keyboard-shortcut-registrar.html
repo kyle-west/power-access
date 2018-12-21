@@ -99,7 +99,7 @@
      
       // clean up keys that are stored as pressed, but never keyup-ed
       clearTimeout(cleanUpTimeout);
-      cleanUpTimeout = setTimeout(() => { map = {} }, 500)
+      cleanUpTimeout = setTimeout(() => { map = {} }, 200)
     }
 
     return KeyboardShortcutRegistrar;

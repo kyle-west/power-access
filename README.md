@@ -18,6 +18,7 @@ let options = {
   keyStroke: 'Control+c',              // The key stroke that fires the callback
   displayKeys: '<CTRL> + c',           // The text shown in place of keyStroke to user (if supplied)
   label: 'Copy text to the clipboard'  // The description shown to the user of the action
+  hidden: false;                       // [OPTIONAL] default:false, show the shortcut in the power-access menu
 }
 ```
 
@@ -30,13 +31,4 @@ let options = {
 ```
 
 # Inject HTML / Styles
-```js
-document.querySelector('power-access').injectHTML = `
-  <style>
-    h1 {
-      color: red;
-    }
-  </style>
-  <p>This is an injected description paragraph.</p>
-`
-```
+> As of version 1.0.0, style injections are not longer supported, since the `<power-access>` component no longer uses ShadowDOM.

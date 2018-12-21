@@ -31,4 +31,12 @@ let options = {
 ```
 
 # Inject HTML / Styles
-> As of version 1.0.0, style injections are not longer supported, since the `<power-access>` component no longer uses ShadowDOM.
+> As of version 1.0.0, the `<power-access>` component no longer uses ShadowDOM, so HTML injection may no longer be needed by your application.
+
+Use the following to inject an additional stylesheet into the component:
+
+```js
+document.querySelector('power-access').injectHTML = `
+  <style include="id-of-stylessheet"></style>
+`
+```

@@ -9,12 +9,12 @@
     constructor (...args) {
       super(...args);
       this.shortcutManager = new KeyboardShortcutRegistrar();
-      this.shortcutManager.register({keyStroke: 'Escape', displayKeys: '<ESC>', label:'Exit Menu'}, () => {
+      this.shortcutManager.register({keyStroke: 'Escape', hidden: true}, () => {
         if (this.menuOpen) {
-          this.closeShorcutMenu();
+          this.closeShortcutMenu();
         }
       });
-      this.shortcutManager.register({keyStroke: 'Shift+?', label:'Open/Close Shortcut Menu'}, this.toggleShortcutMenu.bind(this));
+      this.shortcutManager.register({keyStroke: 'Shift+?', displayKeys: '<SHIFT> + <?>', label:'Open/Close Shortcut Menu'}, this.toggleShortcutMenu.bind(this));
     }
 
     static register () {
@@ -24,28 +24,27 @@
     toggleShortcutMenu () {
       if (this.menu) {
         if (this.menuOpen) {
-          this.closeShorcutMenu();
+          this.closeShortcutMenu();
         } else {
-          this.openShorcutMenu();
+          this.openShortcutMenu();
         }
       } else {
         this.createShortcutMenu();
-        this.openShorcutMenu();
+        this.openShortcutMenu();
       }
     }
 
-    openShorcutMenu () {
+    openShortcutMenu () {
       this.menuOpen = true;
       this.menu.style.display = 'block';
     }
 
-    closeShorcutMenu () {
+    closeShortcutMenu () {
       this.menuOpen = false;
       this.menu.style.display = 'none';
     }
 
     createShortcutMenu () {
-      this.createShadowRoot();
       this.menu = document.createElement('div');
       this.menu.style.position = 'fixed';
       this.menu.style.width = '100%';
@@ -76,6 +75,7 @@
 
           .shortcut--keystroke {
             font-weight: bold;
+            text-align: center;
           }
         </style>
         <div class="menu-overlay">
@@ -84,13 +84,14 @@
           ${this.generateMenuContents()} 
         </div>
       `;
-      this.shadowRoot.appendChild(this.menu);
+      this.appendChild(this.menu);
     }
 
     generateMenuContents () {
       let controls = this.shortcutManager.controls;
       let html = '<ul>';
       for (key in controls) {
+        if (controls[key].hidden) continue;
         let keyStroke = controls[key].displayKeys || key;
         keyStroke = keyStroke.replace(/\</g,"&lt;").replace(/\>/g,"&gt;");
         let label = controls[key].label;

@@ -23,7 +23,7 @@
 
     class KeyboardShortcutRegistrar {
       constructor (options) {
-        (instance || this).debug = (options && options.debug) || false;
+        (instance || this).debug = (options && options.debug) || (instance && instance.debug) || false;
 
         if (instance) {
           return instance;
@@ -39,18 +39,19 @@
       }
 
       register (cmd, cb) {
-        if (!(cmd && cmd.label && cmd.keyStroke)) {
-          console.error(new Error(`Shortcuts must define a keyStroke and a label. Given: ${JSON.stringify(cmd)}`))
+        if (!(cmd && cmd.label && cmd.keyStroke) && !cmd.hidden) {
+          throw new Error(`Shortcuts must define a keyStroke and a label. Given: ${JSON.stringify(cmd)}`);
           return;
         }
         if (this.controls[cmd.keyStroke]) {
-          console.error(new Error(`About to override "${cmd}" callback in KeyboardShortcutRegistrar`))
+          throw new Error(`About to override "${cmd}" callback in KeyboardShortcutRegistrar`);
           return;
         }
-        this.controls[cmd.keyStroke] = cb;
+        this.controls[cmd.keyStroke] = cb || { doNotFire: true };
         this.controls[cmd.keyStroke].shortcut = new KeyboardShortcut(cmd.keyStroke);
         this.controls[cmd.keyStroke].label = cmd.label;
         this.controls[cmd.keyStroke].displayKeys = cmd.displayKeys;
+        this.controls[cmd.keyStroke].hidden = !!cmd.hidden;
       }
 
       invokeShortcut(keys) {
@@ -66,7 +67,7 @@
           }
         }
         this.debug && console.log(shortcutStr, '--->', `[${label}]\t`, cb || '');
-        if (cb) cb ();
+        if (cb && !cb.doNotFire) cb ();
       }
 
       registerDoNotFireShortcutsElement (tagName) {
@@ -92,8 +93,13 @@
       }
     }
 
+    let cleanUpTimeout;
     function keyup (e) {
       map[e.keyCode] = false;
+     
+      // clean up keys that are stored as pressed, but never keyup-ed
+      clearTimeout(cleanUpTimeout);
+      cleanUpTimeout = setTimeout(() => { map = {} }, 500)
     }
 
     return KeyboardShortcutRegistrar;
